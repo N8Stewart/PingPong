@@ -74,10 +74,10 @@ void ping(int senderRank, double *buffer, int bufferSize) {
 		outputStats(runtime, bandwidth, bufferSize);
 }
 
-void outputStats(unsigned long time, double bandwidth, int bufferSize) {
+void outputStats(double time, double bandwidth, int bufferSize) {
 	printf("*****************************************\n");
 	printf("Test           :\t%d\n", bufferSize);
-	printf("Runtime (clock):\t%lu\n", time);
+	printf("Runtime (clock):\t%lf\n", time);
 	printf("Bandwidth      :\t%lf\n", bandwidth);
 	printf("*****************************************\n");
 }

@@ -5,7 +5,7 @@
  */
 
 // Number of times the message transfer should occur
-#define NUM_ITERATIONS 10000
+#define NUM_ITERATIONS 1000000
 
 #define RANDOM_VALUE_MIN 1.0
 #define RANDOM_VALUE_MAX 4.0
@@ -24,7 +24,7 @@ void ping(int rank, double *buffer, int bufferSize);
  * param 'bandwidth' represents how much data was sent over the interface during the interaction
  * param 'bufferSize' allows the output to specify which test was just run
  */
-void outputStats(unsigned long time, double bandwidth, int bufferSize);
+void outputStats(double time, double bandwidth, int bufferSize);
 
 /*
  * Seed the buffer with random double values

@@ -1,6 +1,6 @@
 # Common arguments called with all compilation statements
-COMMON_ARGUMENTS          := -Wall -Werror -g #-pg
-OPTIMIZATION_LEVEL        := -O0
+COMMON_ARGUMENTS          := -Wall -Werror #-g #-pg
+OPTIMIZATION_LEVEL        := -O3
 PING_PONG_FILE            := stewart_nate_lab5.c
 PING_PONG_HEADER          := stewart_nate_lab5.h
 PING_PONG_OUTPUT          := a.out 
