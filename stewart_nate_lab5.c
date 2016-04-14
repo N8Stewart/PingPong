@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
 
 	// Exit if the user supplied invalid number of processes
-	if (size > 2) {
+	if (size != 2) {
 		if (rank == 0) // Only output the warning message once
 			printf("Ping pong is a 2 process program. Only supply two processes using '-np 2'\n");
 		return -1;
@@ -66,13 +66,13 @@ void ping(int senderRank, double *buffer, int bufferSize) {
 	
 	// Stop timer and calculate runtime/bandwidth
 	clockTime = clock() - clockTime;
-	runTime = clockTime * 1.0 / 1000000;
+	runtime = clockTime * 1.0 / 1000000;
 	timePerMessage = clockTime / (4.0 * NUM_ITERATIONS);
 	bandwidth = sizeof(*buffer) * bufferSize / timePerMessage;
 
 	// Output results to console if rank is 0
 	if (senderRank == 0)
-		outputStats(runtime, bandwidth, bufferSize);
+		outputStats(runtime, timePerMessage, bandwidth, bufferSize);
 }
 
 void outputStats(double runtime, double timePerMessage, double bandwidth, int bufferSize) {
@@ -92,3 +92,4 @@ void seed(double *buffer, int bufferSize) {
 		buffer[i] = RANDOM_VALUE_MIN + (rand() / dist);
 	}
 }
+
