@@ -49,7 +49,7 @@ void ping(int senderRank, double *buffer, int bufferSize) {
 	int i;
 	int receiverRank = (senderRank + 1) % 2; // Calculate the rank of the receiver
 	MPI_Status status;
-	double runtime, bandwidth;
+	double runtime, timePerMessage, bandwidth;
 	clock_t clockTime;
 	
 	// Block until both threads are ready to transact
@@ -66,19 +66,21 @@ void ping(int senderRank, double *buffer, int bufferSize) {
 	
 	// Stop timer and calculate runtime/bandwidth
 	clockTime = clock() - clockTime;
-	runtime = clockTime / (4.0 * NUM_ITERATIONS);
-	bandwidth = sizeof(*buffer) * bufferSize / runtime;
+	runTime = clockTime * 1.0 / 1000000;
+	timePerMessage = clockTime / (4.0 * NUM_ITERATIONS);
+	bandwidth = sizeof(*buffer) * bufferSize / timePerMessage;
 
 	// Output results to console if rank is 0
 	if (senderRank == 0)
 		outputStats(runtime, bandwidth, bufferSize);
 }
 
-void outputStats(double time, double bandwidth, int bufferSize) {
+void outputStats(double runtime, double timePerMessage, double bandwidth, int bufferSize) {
 	printf("*****************************************\n");
-	printf("Test           :\t%d\n", bufferSize);
-	printf("Runtime (clock):\t%lf\n", time);
-	printf("Bandwidth      :\t%lf\n", bandwidth);
+	printf("Test             :\t%d\n", bufferSize);
+	printf("Runtime (clock)  :\t%.3lf seconds\n", runtime);
+	printf("Time per Message :\t%.3lf seconds\n", timePerMessage);
+	printf("Bandwidth        :\t%.3lf\n", bandwidth);
 	printf("*****************************************\n");
 }
 
