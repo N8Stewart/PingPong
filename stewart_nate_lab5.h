@@ -21,11 +21,10 @@ void ping(int rank, double *buffer, int bufferSize);
 /* 
  * Output the stats to the console for the specific run
  * param 'runtime' is how long (in seconds) the entire interaction took
- * param 'timePerMessage' is how long (in seconds) a single message took to send/recv
  * param 'bandwidth' represents how much data was sent over the interface during the interaction
  * param 'bufferSize' allows the output to specify which test was just run
  */
-void outputStats(double runtime, double timePerMessage, double bandwidth, int bufferSize);
+void outputStats(double runtime, double bandwidth, int bufferSize);
 
 /*
  * Seed the buffer with random double values

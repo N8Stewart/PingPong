@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <mpi.h>
 #include <time.h>
+
 #include "stewart_nate_lab5.h"
 
 int main(int argc, char **argv) {
@@ -48,6 +49,7 @@ void ping(int senderRank, double *buffer, int bufferSize) {
 
 	int i;
 	int receiverRank = (senderRank + 1) % 2; // Calculate the rank of the receiver
+	int messageSend = senderRank, messageRcv = receiverRank;
 	MPI_Status status;
 	double runtime, timePerMessage, bandwidth;
 	clock_t clockTime;
@@ -58,29 +60,28 @@ void ping(int senderRank, double *buffer, int bufferSize) {
 	// Start timer and run through all iterations
 	clockTime = clock();
 	for (i = 0; i < NUM_ITERATIONS; i++) {
-		MPI_Send(buffer, bufferSize, MPI_DOUBLE, receiverRank, 0, MPI_COMM_WORLD);
-		MPI_Recv(buffer, bufferSize, MPI_DOUBLE, receiverRank, 0, MPI_COMM_WORLD, &status);
-		MPI_Send(buffer, bufferSize, MPI_DOUBLE, receiverRank, 1, MPI_COMM_WORLD);
-		MPI_Recv(buffer, bufferSize, MPI_DOUBLE, receiverRank, 1, MPI_COMM_WORLD, &status);
+		MPI_Send(buffer, bufferSize, MPI_DOUBLE, receiverRank, messageSend, MPI_COMM_WORLD);
+		MPI_Recv(buffer, bufferSize, MPI_DOUBLE, receiverRank, messageRcv, MPI_COMM_WORLD, &status);
+		MPI_Send(buffer, bufferSize, MPI_DOUBLE, receiverRank, messageSend + 2, MPI_COMM_WORLD);
+		MPI_Recv(buffer, bufferSize, MPI_DOUBLE, receiverRank, messageRcv + 2, MPI_COMM_WORLD, &status);
 	}
 	
 	// Stop timer and calculate runtime/bandwidth
 	clockTime = clock() - clockTime;
 	runtime = clockTime * 1.0 / 1000000;
-	timePerMessage = clockTime / (4.0 * NUM_ITERATIONS);
+	timePerMessage = runtime / (4.0 * NUM_ITERATIONS);
 	bandwidth = sizeof(*buffer) * bufferSize / timePerMessage;
 
 	// Output results to console if rank is 0
 	if (senderRank == 0)
-		outputStats(runtime, timePerMessage, bandwidth, bufferSize);
+		outputStats(runtime, bandwidth, bufferSize);
 }
 
-void outputStats(double runtime, double timePerMessage, double bandwidth, int bufferSize) {
+void outputStats(double runtime, double bandwidth, int bufferSize) {
 	printf("*****************************************\n");
 	printf("Test             :\t%d\n", bufferSize);
-	printf("Runtime (clock)  :\t%.3lf seconds\n", runtime);
-	printf("Time per Message :\t%.3lf seconds\n", timePerMessage);
-	printf("Bandwidth        :\t%.3lf\n", bandwidth);
+	printf("Runtime (clock)  :\t%.5lf seconds\n", runtime);
+	printf("Bandwidth        :\t%.5lf\n", bandwidth);
 	printf("*****************************************\n");
 }
 
