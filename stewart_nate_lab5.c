@@ -81,7 +81,7 @@ void outputStats(double runtime, double bandwidth, int bufferSize) {
 	printf("*****************************************\n");
 	printf("Test             :\t%d\n", bufferSize);
 	printf("Runtime (clock)  :\t%.5lf seconds\n", runtime);
-	printf("Bandwidth        :\t%.5lf\n", bandwidth);
+	printf("Bandwidth        :\t%.5lf\n bytes/sec", bandwidth);
 	printf("*****************************************\n");
 }
 
